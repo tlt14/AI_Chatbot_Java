@@ -80,4 +80,13 @@ public class Handle {
             textArea1.append("Error: Không thể xử lý chuỗi truyền vào");
         }
     }
+    public void ChangeMoney(JTextArea textArea1,JSONObject res){
+        if(res.getString("error").equals("")){
+            JSONObject data;
+            data= res.getJSONObject("data");
+            textArea1.append("REP: "+data.get("money").toString()+" "+data.getString("from")+" = "+data.getString("change")+" "+data.getString("to"));
+        }else{
+            textArea1.append("Error: "+res.getString("error"));
+        }
+    }
 }

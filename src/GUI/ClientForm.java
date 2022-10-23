@@ -54,6 +54,7 @@ public class ClientForm extends JFrame{
                 JSONObject res ;
                 try{
                     res = new JSONObject(in.readLine());
+                    System.out.println(res);
                 }catch (Exception exception){
                     res = new JSONObject();
                     res.put("result","");
@@ -66,11 +67,13 @@ public class ClientForm extends JFrame{
                     handle.Weather(textArea1,res);
                 }else if(res.getString("result").equals("md5")){
                     handle.Md5(textArea1,res);
-                }else{
+                }else if(res.getString("result").trim().equals("change")) {
+                    handle.ChangeMoney(textArea1, res);
+                }else {
                     handle.ChatBOT(textArea1,res);
                 }
                 //set scroll panel bottom
-                sb.setValue( sb.getMaximum());
+                sb.setValue(sb.getMaximum());
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }

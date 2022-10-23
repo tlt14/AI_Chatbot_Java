@@ -24,22 +24,28 @@ public class ChangeMoney {
     public JSONObject result (String moneyFrom, String moneyTo, long money){
         JSONObject data = new JSONObject();
         JSONObject result = new JSONObject();
-        Document doc = getData(moneyFrom,moneyTo,money);
-        Elements e = doc.select("div.fxtoday>p>b");
+        try {
+            Document doc = getData(moneyFrom,moneyTo,money);
+            Elements e = doc.select("div.fxtoday>p>b");
             data.put("from",moneyFrom);
             data.put("to",moneyTo);
             data.put("money",money);
             data.put("change", Objects.requireNonNull(e.get(2).select("#srate").first()).ownText()+" ");
             result.put("data",data);
-            result.put("result","changemoney");
+            result.put("result","change");
             result.put("error","");
+        }catch (Exception e){
+            result.put("data","");
+            result.put("result","change");
+            result.put("error","Bạn nhập sai cú pháp rồi");
+        }
         return result;
     }
     public static void main(String[] args) {
         ChangeMoney c= new ChangeMoney();
         String moneyFrom = "usd";
-        String moneyTo = "vnd";
+//        String moneyTo = ;
         long money = 15000000;
-        System.out.println(c.result(moneyFrom,moneyTo,money));
+        System.out.println(c.result(moneyFrom,null,money));
     }
 }

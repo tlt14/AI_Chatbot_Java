@@ -7,6 +7,8 @@ import Server.Whois;
 import Server.getInfoIP;
 import Server.Weather;
 import Server.MD5;
+import Server.APIchat;
+import Server.ChangeMoney;
 import org.json.JSONObject;
 
 public class Worker implements Runnable {
@@ -24,6 +26,7 @@ public class Worker implements Runnable {
         arr.add("ip");
         arr.add("md5");
         arr.add("decrypted");
+        arr.add("change");
     }
 
     @Override
@@ -89,6 +92,24 @@ public class Worker implements Runnable {
                             res.put("data", data);
                             res.put("result", "weather");
                             out.write(res.toString());
+                        }
+                    }
+                    case "change"->{
+                        String mess = req.getString("mess");
+                        System.out.println(mess);
+                        if(mess.equals("")){
+                            out.write(String.valueOf(new ChangeMoney().result(null,null, Long.parseLong("0"))));
+                        }else{
+                            try {
+                                StringTokenizer stringTokenizer = new StringTokenizer(mess,";");
+                                String money = stringTokenizer.nextToken();
+                                String from = stringTokenizer.nextToken();
+                                String to = stringTokenizer.nextToken();
+                                System.out.println(new ChangeMoney().result(from,to, Long.parseLong(money)));
+                                out.write(new ChangeMoney().result(from,to, Long.parseLong(money)).toString());
+                            }catch (Exception e){
+                                out.write(String.valueOf(new ChangeMoney().result(null,null, Long.parseLong("0"))));
+                            }
                         }
                     }
                     default -> {

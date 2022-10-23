@@ -20,4 +20,5 @@ Ví dụ: weather-Ho Chi Minh
 Đổi tiền 
 change-"Số tiền muốn đổi";"Đơn vị tiền tệ ";"Đơn vị tiền 
 tệ muốn đổi"
+
 Ví dụ : change-15;usd;vnd

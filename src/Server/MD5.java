@@ -42,10 +42,4 @@ public class MD5{
         }
         return jsonObject;
     }
-    public static void main(String[] args) {
-        MD5 md5= new MD5();
-        System.out.println(md5.Hash("truong"));;
-        System.out.println(md5.Decrypted("5d41402abc4b2a76b9719d911017c592"));
-        System.out.println(md5.Decrypted("123"));
-    }
 }

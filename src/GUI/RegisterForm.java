@@ -1,13 +1,15 @@
 package GUI;
 
-import BLL.UserBLL;
-import DTO.User;
 import Helper.HashPass;
+import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 public class RegisterForm extends JFrame {
     private JTextField textField1;
@@ -15,6 +17,7 @@ public class RegisterForm extends JFrame {
     private JButton signUpButton;
     private JPanel RegisterPanel;
     private JPasswordField passwordField2;
+    private JButton goToLoginFormButton;
 
     public RegisterForm(JFrame parent){
         setTitle("REGISTER");
@@ -24,19 +27,42 @@ public class RegisterForm extends JFrame {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setVisible(true);
         pack();
-        signUpButton.addActionListener(new ActionListener() {
+        signUpButton.addActionListener(e->{
+            String email = textField1.getText().trim();
+                String password = new String(passwordField2.getPassword());
+                Document doc = null ;
+                try {
+                    doc = Jsoup.connect("http://localhost:4000/api/auth/register")
+                            .ignoreHttpErrors(true)
+                            .ignoreContentType(true)
+                            .data("email",email)
+                            .data("password",password)
+                            .post();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+                JSONObject res = new JSONObject(doc.body().ownText());
+                if(res.getString("error").equals("false")){
+                    new OTPForm(this,email);
+                }else{
+                    JOptionPane.showMessageDialog(parent,res.getString("error"),"Error",JOptionPane.ERROR_MESSAGE);
+                }
+
+//                User user = new User(username, HashPass.Hash(confirmPassword));
+//                if(new UserBLL().InsertUser(user)){
+//                    JOptionPane.showMessageDialog(null,"Đăng ký thành công");
+//                    dispose();
+//                    new LoginForm(null);
+//                }else{
+//                    JOptionPane.showMessageDialog(null,"Đăng ký thất bại","Erorr",JOptionPane.ERROR_MESSAGE);
+//                }
+
+        });
+        goToLoginFormButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String username = textField1.getText().trim();
-                String confirmPassword = new String(passwordField2.getPassword());
-                User user = new User(username, HashPass.Hash(confirmPassword));
-                if(new UserBLL().InsertUser(user)){
-                    JOptionPane.showMessageDialog(null,"Đăng ký thành công");
-                    dispose();
-                    new LoginForm(null);
-                }else{
-                    JOptionPane.showMessageDialog(null,"Đăng ký thất bại","Erorr",JOptionPane.ERROR_MESSAGE);
-                }
+                new LoginForm(null);
+                dispose();
             }
         });
     }

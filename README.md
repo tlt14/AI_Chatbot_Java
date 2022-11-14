@@ -9,10 +9,10 @@ Ví dụ : ip-8.8.8.8
 whois-"domain"
 Ví dụ: whois-sgu.edu.vn
 
-md5-"chuỗi cần mã hóa"
+enc-"chuỗi cần mã hóa"
 Ví dụ: md5-hello
 
-decrypt-"chuỗi md5 cần giải mã"
+dec-"chuỗi md5 cần giải mã"
 
 weather-"địa chỉ muốn xem thời tiết dạng không dấu"
 Ví dụ: weather-Ho Chi Minh

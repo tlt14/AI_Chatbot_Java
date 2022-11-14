@@ -1,3 +1,5 @@
+import Security.RSA.*;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -17,9 +19,11 @@ public class Server {
             server =new ServerSocket(port);
             System.out.println("server  start port :"+port);
             System.out.println("Waiting .....");
+
+            generateKey RSA =new generateKey();
             while (true){
                 Socket socket = server.accept();
-                executorService.execute(new Worker(socket));
+                executorService.execute(new Worker(socket,RSA.getPublicKey(), RSA.getPrivateKey()));
             }
         } catch (IOException e) {
             throw new RuntimeException(e);

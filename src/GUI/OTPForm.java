@@ -16,6 +16,7 @@ public class OTPForm extends JFrame{
     private JButton sendOTPButton;
 
     private String otp;
+    public boolean check=false;
     public OTPForm(JFrame parent,String email){
         setTitle("OTP");
         setContentPane(OTPpanel);
@@ -42,6 +43,7 @@ public class OTPForm extends JFrame{
 
     private void checkOTP(String email,String input,JFrame parent) {
         if (input.equals(otp)) {
+            check=true;
             JOptionPane.showMessageDialog(parent, "Đăng nhập thành công");
             dispose();
             parent.dispose();
@@ -56,7 +58,7 @@ public class OTPForm extends JFrame{
         JSONObject res = new SendEmail().result(email, otp);
         start = System.currentTimeMillis();
         if (res.getBoolean("success")) {
-            JOptionPane.showMessageDialog(null, "mã OTP được gửi tới gmail của bạn");
+            JOptionPane.showMessageDialog(null, "mã OTP được gửi tới gmail của  ");
         }
 
         end = System.currentTimeMillis();

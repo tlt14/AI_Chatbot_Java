@@ -43,20 +43,20 @@ public class RegisterForm extends JFrame {
                 }
                 JSONObject res = new JSONObject(doc.body().ownText());
                 if(res.getString("error").equals("false")){
-                    new OTPForm(this,email);
+                    if(new OTPForm(this,email).check==false){
+                        try {
+                            Jsoup.connect("http://localhost/api/auth/delete")
+                                    .ignoreHttpErrors(true)
+                                    .ignoreContentType(true)
+                                    .data("email",email)
+                                    .post();
+                        } catch (IOException ex) {
+                            throw new RuntimeException(ex);
+                        }
+                    }
                 }else{
                     JOptionPane.showMessageDialog(parent,res.getString("error"),"Error",JOptionPane.ERROR_MESSAGE);
                 }
-
-//                User user = new User(username, HashPass.Hash(confirmPassword));
-//                if(new UserBLL().InsertUser(user)){
-//                    JOptionPane.showMessageDialog(null,"Đăng ký thành công");
-//                    dispose();
-//                    new LoginForm(null);
-//                }else{
-//                    JOptionPane.showMessageDialog(null,"Đăng ký thất bại","Erorr",JOptionPane.ERROR_MESSAGE);
-//                }
-
         });
         goToLoginFormButton.addActionListener(new ActionListener() {
             @Override

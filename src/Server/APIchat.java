@@ -17,6 +17,7 @@ public class APIchat {
 //                    .post();
             document = Jsoup.connect("https://simsimi.info/api/?text="+message+"&lc=vn")
                     .ignoreContentType(true)
+                    .ignoreHttpErrors(true)
                     .get();
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -39,6 +40,6 @@ public class APIchat {
 
     public static void main(String[] args) {
         APIchat a= new APIchat();
-        System.out.println(a.result("chó"));
+        System.out.println(a.result("hello"));
     }
 }

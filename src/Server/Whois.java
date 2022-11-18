@@ -11,11 +11,12 @@ import java.io.IOException;
 public class Whois {
     public Document getData(String domain){
         Document doc =null;
+        System.out.println("https://123host.vn/domain/whois?domain="+domain);
         try {
             doc = Jsoup.connect("https://123host.vn/domain/whois?domain="+domain)
                     .ignoreContentType(true)
                     .get();
-            System.out.println(doc);
+//            System.out.println(doc);
         } catch (IOException e) {
             e.printStackTrace();
         }

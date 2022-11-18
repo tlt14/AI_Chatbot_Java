@@ -66,6 +66,7 @@ public class Handle {
         }
     }
     public void ChatBOT(JTextArea textArea1,JSONObject res){
+        System.out.println(res);
         textArea1.append("Rep:"+res.getString("data")+"\n");
     }
     public void Md5(JTextArea textArea1,JSONObject res){

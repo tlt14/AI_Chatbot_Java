@@ -16,7 +16,7 @@ public class OTPForm extends JFrame{
     private JButton sendOTPButton;
 
     private String otp;
-    public boolean check=false;
+    public boolean check=true;
     public OTPForm(JFrame parent,String email){
         setTitle("OTP");
         setContentPane(OTPpanel);
@@ -43,12 +43,12 @@ public class OTPForm extends JFrame{
 
     private void checkOTP(String email,String input,JFrame parent) {
         if (input.equals(otp)) {
-            check=true;
             JOptionPane.showMessageDialog(parent, "Đăng nhập thành công");
             dispose();
             parent.dispose();
             new ClientForm(null, email);
         } else {
+            check = false;
             JOptionPane.showMessageDialog(null, "Mã otp sai rồi");
         }
     }

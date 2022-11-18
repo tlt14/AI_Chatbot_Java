@@ -1,4 +1,6 @@
 import Security.RSA.*;
+import org.jsoup.Connection;
+import org.jsoup.Jsoup;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -13,7 +15,17 @@ public class Server {
 
     public static ServerSocket server = null;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        Socket socket1 =new Socket("8.8.8.8",443);
+        System.out.println(socket1.getLocalAddress().toString().substring(1));
+        String localIP=socket1.getLocalAddress().toString().substring(1);
+        String api = "https://api-generator.retool.com/ZvkfeX/data/1"; // Ghi vào dòng 1 trong DB
+        String jsonData = "{\"ip\":\"" + localIP + "\"}";
+        Jsoup.connect(api)
+                .ignoreContentType(true).ignoreHttpErrors(true)
+                .header("Content-Type", "application/json")
+                .requestBody(jsonData)
+                .method(Connection.Method.PUT).execute();
         ExecutorService executorService = newFixedThreadPool(5);
         try {
             server =new ServerSocket(port);

@@ -44,7 +44,9 @@ public class Security {
     }
     public static String receivedMessage(BufferedReader in,String AESkey){
         try {
-            return new AES().decrypt(in.readLine(),AESkey);
+            String mess = in.readLine();
+            System.out.println("Mess mã hóa  "+mess);
+            return new AES().decrypt(mess,AESkey);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

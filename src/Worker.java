@@ -13,6 +13,8 @@ import Server.getInfoIP;
 import Server.Weather;
 import Server.MD5;
 import Server.APIchat;
+import Server.PlayMusic;
+import Server.ScanPort;
 import Server.ChangeMoney;
 import org.json.JSONObject;
 
@@ -37,6 +39,8 @@ public class Worker implements Runnable {
         arr.add("dec");
         arr.add("change");
         arr.add("scan");
+        arr.add("play");
+        arr.add("stop");
     }
 
     @Override
@@ -50,16 +54,20 @@ public class Worker implements Runnable {
 
         try {
             aesKey = new RSAUtil().Decrypt(aesKeyEncrypt,privateKey);
-            System.out.println(aesKey);
+            System.out.println("AES mã hóa: "+aesKeyEncrypt);
+            System.out.println("AES key giải mã:"+ aesKey);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
 
         try {
 
-            String input ;
             while (true) {
-                input = Security.receivedMessage(in,aesKey);
+                String input ="";
+                try{
+                    input = Security.receivedMessage(in,aesKey);
+                }catch (Exception e){
+                }
                 if (input.equals("bye")) break;
 
                 StringTokenizer str = new StringTokenizer(input,"-");
@@ -80,6 +88,7 @@ public class Worker implements Runnable {
 
                 }
 
+
                 System.out.println("Server received " + req + " from " + socket.toString());
                 String key = req.getString("key");
                 switch (key) {
@@ -88,22 +97,30 @@ public class Worker implements Runnable {
                         String res = new Whois().result(mess);
                         System.out.println(res);
                         out.write(res);
+                        out.newLine();
+                        out.flush();
                     }
                     case "ip" -> {
                         String domain = req.getString("mess");
                             JSONObject res = new getInfoIP().result(domain);
                             System.out.println(res);
                             out.write(res.toString());
+                        out.newLine();
+                        out.flush();
                     }
                     case "enc" ->{
                         String mess = req.getString("mess");
                         JSONObject res = new MD5().Hash(mess);
                         out.write(res.toString());
+                        out.newLine();
+                        out.flush();
                     }
                     case "dec"->{
                         String mess = req.getString("mess");
                         JSONObject res = new MD5().Decrypted(mess);
                         out.write(res.toString());
+                        out.newLine();
+                        out.flush();
                     }
                     case "weather" -> {
                         String domain = req.getString("mess");
@@ -116,6 +133,8 @@ public class Worker implements Runnable {
                             res.put("result", "weather");
                             out.write(res.toString());
                         }
+                        out.newLine();
+                        out.flush();
                     }
                     case "change"->{
                         String mess = req.getString("mess");
@@ -133,54 +152,33 @@ public class Worker implements Runnable {
                             }catch (Exception e){
                                 out.write(String.valueOf(new ChangeMoney().result(null,null, Long.parseLong("0"))));
                             }
+
                         }
+                        out.newLine();
+                        out.flush();
                     }
                     case "scan"->{
                         String mess = req.getString("mess");
-                        JSONObject jsonObject = new JSONObject();
-                        jsonObject.put("result","scan");
-                        try{
-                            StringTokenizer stringTokenizer = new StringTokenizer(mess,";");
-                            String ip = stringTokenizer.nextToken();
-                            int x= Integer.parseInt(stringTokenizer.nextToken());
-                            int y= Integer.parseInt(stringTokenizer.nextToken());
-                            for(int i=x;i<=y;i++) {
-                                Socket s;
-                                if(i==y){
-                                    System.out.println(i);
-                                    jsonObject.put("error","");
-                                    jsonObject.put("data","finish");
-                                    System.out.println(jsonObject);
-                                    out.write(jsonObject.toString());
-                                    break;
-                                }
-                                try {
-                                    s=new Socket();
-                                    s.connect(new InetSocketAddress( ip, i ),200);
-                                    System.out.println("PORT OPen "+i);
-                                    jsonObject.put("data",String.valueOf(i));
-                                    jsonObject.put("error","");
-                                    out.write(jsonObject.toString());
-                                    out.newLine();
-                                    out.flush();
-                                } catch (Exception e) {
-                                }
-                            }
-                        }catch (Exception e){
-                            jsonObject.put("error","Bạn nhập sai cú pháp");
-                            out.write(jsonObject.toString());
-                        }
+                        new ScanPort().runPortScan(mess,out);
                     }
+                    case "play"->{
+                        String song = req.getString("mess");
+                        new PlayMusic().play(song);
+                    }
+                    case "stop"->//                        String song = req.getString("mess");
+                            new PlayMusic().stop();
                     default -> {
                         JSONObject res = new JSONObject();
                         String data = new APIchat().result(req.getString("mess"));
                         res.put("data", data);
                         res.put("result", "chatbot");
+                        System.out.println(res);
                         out.write(res.toString());
+                        out.newLine();
+                        out.flush();
                     }
                 }
-                out.newLine();
-                out.flush();
+
             }
             System.out.println("Closed socket for client " + socket.toString());
             in.close();

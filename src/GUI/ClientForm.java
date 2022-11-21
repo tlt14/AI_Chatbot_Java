@@ -56,7 +56,7 @@ public class ClientForm extends JFrame{
 
         String AESKey = String.valueOf(new Date().getTime());
         try {
-            Socket socket = new Socket(getIpServer(), 5000);
+            Socket socket = new Socket(ConfigURL.IP_SERVER, 5000);
             BufferedWriter out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             RSAUtil rsaUtil =new RSAUtil();
@@ -76,17 +76,17 @@ public class ClientForm extends JFrame{
 
     }
 
-    public String getIpServer() throws IOException {
-        String api = "https://api-generator.retool.com/ZvkfeX/data/1"; // Ghi vào dòng 1 trong DB
-        Document doc = Jsoup.connect(api)
-                .ignoreContentType(true).ignoreHttpErrors(true)
-                .header("Content-Type", "application/json")
-                .method(Connection.Method.GET).execute().parse();
-        JSONObject jsonObject = new JSONObject(doc.text());
-        System.out.println(jsonObject);
-        System.out.println(jsonObject.get("ip"));
-        return (jsonObject.get("ip").toString());
-    }
+//    public String getIpServer() throws IOException {
+//        String api = "https://api-generator.retool.com/ZvkfeX/data/1"; // Ghi vào dòng 1 trong DB
+//        Document doc = Jsoup.connect(api)
+//                .ignoreContentType(true).ignoreHttpErrors(true)
+//                .header("Content-Type", "application/json")
+//                .method(Connection.Method.GET).execute().parse();
+//        JSONObject jsonObject = new JSONObject(doc.text());
+//        System.out.println(jsonObject);
+//        System.out.println(jsonObject.get("ip"));
+//        return (jsonObject.get("ip").toString());
+//    }
     public static void main(String[] args) {
         new ClientForm(null,"tlt14@gmail.com");
     }

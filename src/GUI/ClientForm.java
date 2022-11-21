@@ -1,5 +1,4 @@
 package GUI;
-
 import Helper.Handle;
 import Helper.Security;
 import Security.RSA.RSAUtil;
@@ -14,26 +13,18 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.*;
 import java.net.Socket;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.Date;
-import java.util.Timer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-
 public class ClientForm extends JFrame{
-    private final BufferedWriter out;
-    private final BufferedReader in;
-
     private JTextArea textArea1;
     private JPanel header;
     private JTextField textField1;
@@ -41,8 +32,6 @@ public class ClientForm extends JFrame{
     private JPanel ClientPanel;
     private JLabel Username;
     private JScrollPane scrollPane;
-
-    private String AESKey ;
 
     public ClientForm(JFrame frame, @NotNull String email){
         JScrollBar sb = scrollPane.getVerticalScrollBar();
@@ -54,36 +43,37 @@ public class ClientForm extends JFrame{
         setLocationRelativeTo(frame);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setVisible(true);
-        AESKey = String.valueOf(new Date().getTime());
+        this.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                int hoi = JOptionPane.showConfirmDialog(null, "Bạn có muốn thoát chương trình không?",
+                        null, JOptionPane.YES_NO_OPTION);
+                if (hoi == JOptionPane.YES_OPTION) {
+                    System.exit(0);
+                }
+            }
+        });
+
+
+        String AESKey = String.valueOf(new Date().getTime());
         try {
             Socket socket = new Socket(getIpServer(), 5000);
-            out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             RSAUtil rsaUtil =new RSAUtil();
             PublicKey publicKeyFromServer = rsaUtil.convertStringToPublicKey(in.readLine());
             Security.sendAESKeyToServer(out,rsaUtil.Encrypt(AESKey,publicKeyFromServer));
 
-            Send send = new Send(socket, out,sendButton,textArea1,textField1,AESKey,sb);
+            Send send = new Send(socket, out,sendButton,textArea1,textField1, AESKey,sb);
             Receive recv = new Receive(socket, in,textArea1,sb);
             ExecutorService excutor = Executors.newFixedThreadPool(2);
             excutor.execute(send);
             excutor.execute(recv);
 
-        } catch (IOException ex) {
+        } catch (IOException | InvalidKeySpecException | NoSuchAlgorithmException | NoSuchPaddingException |
+                 IllegalBlockSizeException | BadPaddingException | InvalidKeyException ex) {
             throw new RuntimeException(ex);
-        } catch (InvalidKeySpecException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchPaddingException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalBlockSizeException e) {
-            throw new RuntimeException(e);
-        } catch (BadPaddingException e) {
-            throw new RuntimeException(e);
-        } catch (InvalidKeyException e) {
-            throw new RuntimeException(e);
         }
+
     }
 
     public String getIpServer() throws IOException {
@@ -131,20 +121,17 @@ class Send implements Runnable{
 
     public void run (){
         try{
-            btn.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    String mess = jTextField.getText();
-                    System.out.println(mess);
-                    textArea.append("Me: "+mess+"\n");
-                    sb.setValue(sb.getMaximum());
-                    jTextField.setText("");
-                    if(!mess.equals("")){
-                        try {
-                            Security.sendMesssage(out,mess,AESKey);
-                        } catch (IOException ex) {
-                            throw new RuntimeException(ex);
-                        }
+            btn.addActionListener(e -> {
+                String mess = jTextField.getText();
+                System.out.println(mess);
+                textArea.append("Me: "+mess+"\n");
+                sb.setValue(sb.getMaximum());
+                jTextField.setText("");
+                if(!mess.equals("")){
+                    try {
+                        Security.sendMesssage(out,mess,AESKey);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
                     }
                 }
             });
@@ -162,7 +149,7 @@ class Receive implements Runnable{
     private Socket socket;
     private BufferedReader in;
     JTextArea textArea1;
-JScrollBar sb;
+    JScrollBar sb;
     public Receive(Socket socket, BufferedReader in, JTextArea textArea1,JScrollBar sb) {
         this.socket = socket;
         this.in = in;
@@ -171,13 +158,11 @@ JScrollBar sb;
     }
 
     public void run(){
-        try {
             while(true){
                 Handle handle = new Handle();
                 JSONObject res ;
                 try{
                     res = new JSONObject(in.readLine());
-//                    System.out.println(res);
                 }catch (Exception exception){
                     res = new JSONObject();
                     res.put("result","");
@@ -199,19 +184,30 @@ JScrollBar sb;
                             res = new JSONObject(in.readLine());
                             System.out.println(res);
                         }catch (Exception es){
-                            System.out.println(in.readLine());
+                            try {
+                                System.out.println(in.readLine());
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
                         }
                     }while (!res.getString("data").equals("finish"));
                     handle.Scan(textArea1,res);
-
+                }else if(res.getString("result").trim().equals("music")) {
+                    try {
+                        handle.PlayMusic(textArea1, res);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }else if(res.getString("result").trim().equals("stop")) {
+                    try {
+                        handle.Stop(textArea1,res);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }else{
                     handle.ChatBOT(textArea1,res);
                 }
-                //set scroll panel bottom
                 sb.setValue(sb.getMaximum());
             }
-        }catch(IOException e){
-            System.out.println(e.getMessage());
-        }
     }
 }

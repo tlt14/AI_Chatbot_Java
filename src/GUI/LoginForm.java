@@ -1,16 +1,11 @@
 package GUI;
 
-
-import Helper.Security;
-import Helper.SendEmail;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 
 public class LoginForm extends JFrame{
@@ -30,9 +25,9 @@ public class LoginForm extends JFrame{
         loginButton.addActionListener(e -> {
             String email = textField1.getText();
             String password = new String(passwordField1.getPassword());
-            Document doc = null ;
+            Document doc  ;
             try {
-                doc = Jsoup.connect("http://localhost:4000/api/auth/login")
+                doc = Jsoup.connect(ConfigURL.API_LOGIN)
                         .ignoreHttpErrors(true)
                         .ignoreContentType(true)
                         .data("email",email)

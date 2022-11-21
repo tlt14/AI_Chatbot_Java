@@ -26,7 +26,7 @@ public class Server {
                 .header("Content-Type", "application/json")
                 .requestBody(jsonData)
                 .method(Connection.Method.PUT).execute();
-        ExecutorService executorService = newFixedThreadPool(5);
+        ExecutorService executorService = newFixedThreadPool(200);
         try {
             server =new ServerSocket(port);
             System.out.println("server  start port :"+port);

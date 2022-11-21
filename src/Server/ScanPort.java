@@ -43,12 +43,28 @@ public class ScanPort {
                         Socket socket = new Socket();
                         socket.connect(new InetSocketAddress(ip, currentPort),200);
                         socket.close();
-                            jsonObject.put("data",String.valueOf(currentPort));
-                            jsonObject.put("error","");
-                        System.out.println(jsonObject);
-                        out.write(jsonObject.toString());
-                        out.newLine();
-                        out.flush();
+                        jsonObject.put("data",String.valueOf(currentPort));
+                        jsonObject.put("error","");
+                        if(currentPort==y){
+                            JSONObject jsonObject1 = new JSONObject();
+                            jsonObject1.put("data","finish");
+                            jsonObject1.put("error","");
+                            jsonObject1.put("result","scan");
+                            out.write(jsonObject.toString());
+                            out.newLine();
+                            out.flush();
+                            try {
+                                out.write(jsonObject1.toString());
+                                out.newLine();
+                                out.flush();
+                            } catch (IOException ex) {
+                                throw new RuntimeException(ex);
+                            }
+                        }else{
+                            out.write(jsonObject.toString());
+                            out.newLine();
+                            out.flush();
+                        }
                     } catch (IOException e) {
                         if(currentPort==y){
                             JSONObject jsonObject1 = new JSONObject();

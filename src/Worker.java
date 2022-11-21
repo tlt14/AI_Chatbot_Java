@@ -1,5 +1,4 @@
 import java.io.*;
-import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -13,7 +12,6 @@ import Server.getInfoIP;
 import Server.Weather;
 import Server.MD5;
 import Server.APIchat;
-import Server.PlayMusic;
 import Server.ScanPort;
 import Server.ChangeMoney;
 import org.json.JSONObject;
@@ -63,10 +61,11 @@ public class Worker implements Runnable {
         try {
 
             while (true) {
-                String input ="";
+                String input ;
                 try{
                     input = Security.receivedMessage(in,aesKey);
-                }catch (Exception e){
+                }catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
                 if (input.equals("bye")) break;
 
@@ -163,13 +162,21 @@ public class Worker implements Runnable {
                     }
                     case "play"->{
                         String song = req.getString("mess");
-                        new PlayMusic().play(song);
+                        out.write("{\"result\": \"music\",\"data\": "+song+",\"error\":\"\"}");
+                        out.newLine();
+                        out.flush();
+                        System.out.println("{\"result\": \"music\",\"data\": "+song+",\"error\":\"\"}");
+//                        PlayMusic.play(song);
                     }
-                    case "stop"->//                        String song = req.getString("mess");
-                            new PlayMusic().stop();
+                    case "stop"-> {
+                        out.write("{\"result\": \"stop\",\"data\": \"stop\",\"error\":\"\"}");
+                        out.newLine();
+                        out.flush();
+                    }
                     default -> {
                         JSONObject res = new JSONObject();
-                        String data = new APIchat().result(req.getString("mess"));
+                        System.out.println();
+                        String data = new APIchat().result(req.getString("mess")).trim().replaceAll("\n","");
                         res.put("data", data);
                         res.put("result", "chatbot");
                         System.out.println(res);

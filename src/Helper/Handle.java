@@ -1,10 +1,12 @@
 package Helper;
 
+import GUI.PlayMusic;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.swing.*;
+import java.io.IOException;
 
 public class Handle {
     public void Whois(JTextArea textArea1 ,@NotNull JSONObject res){
@@ -21,7 +23,7 @@ public class Handle {
             textArea1.append("Trạng thái:\t"+jsonObject1.getString("Trạng thái")+"\n");
             textArea1.append("Loại tên miền:\t"+jsonObject1.getString("Loại tên miền")+"\n");
         }else{
-            textArea1.append(res.getString("error"));
+            textArea1.append(res.getString("error")+"\n");
         }
     }
     public void InfoIP(JTextArea textArea1,@NotNull JSONObject res){
@@ -36,9 +38,8 @@ public class Handle {
                     "Vĩ độ: \t\t"+data.get("lat")+"\n"+
                     "Kinh độ: \t\t"+data.get("lon")+"\n");
         }else {
-            textArea1.append(res.getString("error"));
+            textArea1.append(res.getString("error")+"\n");
         }
-
     }
     public void Weather(JTextArea textArea1, JSONObject res){
         System.out.println(res.toString());
@@ -86,6 +87,26 @@ public class Handle {
             JSONObject data;
             data= res.getJSONObject("data");
             textArea1.append("REP: "+data.get("money").toString()+" "+data.getString("from")+" = "+data.getString("change")+" "+data.getString("to")+"\n");
+        }else{
+            textArea1.append("Error: "+res.getString("error")+"\n");
+        }
+    }
+    public void PlayMusic(JTextArea textArea1,JSONObject res) throws IOException {
+        if(res.getString("error").equals("")){
+            String data;
+            data= res.getString("data");
+            PlayMusic.play(data);
+            textArea1.append("REP: "+"Đang phát nhạc"+"\n");
+        }else{
+            textArea1.append("Error: "+res.getString("error")+"\n");
+        }
+    }
+    public void Stop(JTextArea textArea1,JSONObject res) throws IOException {
+        if(res.getString("error").equals("")){
+            String data;
+            data= res.getString("data");
+            PlayMusic.stop();
+            textArea1.append("REP: "+"Đã dừng phát nhạc"+"\n");
         }else{
             textArea1.append("Error: "+res.getString("error")+"\n");
         }

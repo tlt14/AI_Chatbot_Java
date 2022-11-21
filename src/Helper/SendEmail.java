@@ -1,5 +1,6 @@
 package Helper;
 
+import GUI.ConfigURL;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -10,7 +11,7 @@ public class SendEmail {
     public JSONObject result(String email, String otp){
         Document doc = null;
         try {
-            doc = Jsoup.connect("http://localhost:4000/mail")
+            doc = Jsoup.connect(ConfigURL.API_MAIL)
                     .data("email",email)
                     .data("otp",otp).ignoreContentType(true).post();
         } catch (IOException e) {

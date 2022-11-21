@@ -40,7 +40,7 @@ public class RegisterForm extends JFrame {
 //                            throw new RuntimeException(ex);
 //                        }
                         try {
-                            doc = Jsoup.connect("http://localhost:4000/api/auth/register")
+                            doc = Jsoup.connect(ConfigURL.API_REGISTER)
                                     .ignoreHttpErrors(true)
                                     .ignoreContentType(true)
                                     .data("email",email)

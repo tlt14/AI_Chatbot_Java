@@ -16,7 +16,6 @@ public class Whois {
             doc = Jsoup.connect("https://123host.vn/domain/whois?domain="+domain)
                     .ignoreContentType(true)
                     .get();
-//            System.out.println(doc);
         } catch (IOException e) {
             e.printStackTrace();
         }

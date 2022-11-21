@@ -26,3 +26,7 @@ Ví dụ : change-15;usd;vnd
 Scan-port
 scan-"ip cần scan";"từ port";"đến port";
 Ví dụ scan-127.0.0.1;10;5001
+
+play-Tên bài hát
+Ví dụ: 
+play-Tòng phu

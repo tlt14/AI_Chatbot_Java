@@ -10,7 +10,7 @@ whois-"domain"
 Ví dụ: whois-sgu.edu.vn
 
 enc-"chuỗi cần mã hóa"
-Ví dụ: md5-hello
+Ví dụ: enc-hello
 
 dec-"chuỗi md5 cần giải mã"
 
@@ -21,3 +21,8 @@ Ví dụ: weather-Ho Chi Minh
 change-"Số tiền muốn đổi";"Đơn vị tiền tệ ";"Đơn vị tiền 
 tệ muốn đổi"
 Ví dụ : change-15;usd;vnd
+
+
+Scan-port
+scan-"ip cần scan";"từ port";"đến port";
+Ví dụ scan-127.0.0.1;10;5001

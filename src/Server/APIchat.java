@@ -25,7 +25,7 @@ public class APIchat {
     }
 
     public static void main(String[] args) {
-        new APIchat().result("i[");
+        new APIchat().result("hú");
     }
 
 }

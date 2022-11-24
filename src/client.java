@@ -1,4 +1,3 @@
-import GUI.ClientForm;
 import GUI.ConfigURL;
 import GUI.LoginForm;
 

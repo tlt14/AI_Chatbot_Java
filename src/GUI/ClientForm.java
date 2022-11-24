@@ -24,6 +24,9 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class ClientForm extends JFrame{
     private JTextArea textArea1;
     private JPanel header;

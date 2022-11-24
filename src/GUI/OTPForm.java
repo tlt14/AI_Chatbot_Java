@@ -62,7 +62,7 @@ public class OTPForm extends JFrame{
         }
 
         end = System.currentTimeMillis();
-        if (end - start > 90000) {
+        if (end - start > 120000) {
             otp = String.valueOf(Security.OTP(6));
         }
     }

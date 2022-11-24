@@ -10,9 +10,11 @@ public class APIchat {
         Document document ;
         try{
             document = Jsoup.connect("https://simsimi.info/api/?text="+message+"&lc=vn")
+
                     .ignoreContentType(true)
                     .ignoreHttpErrors(true)
                     .get();
+//            System.out.println("https://simsimi.info/api/?text="+message+"&lc=vn");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -20,12 +22,14 @@ public class APIchat {
     }
     public String result(String message){
         JSONObject jsonObject = new JSONObject(getData(message).body().ownText());
-        System.out.println(jsonObject.getString("message"));
-        return jsonObject.getString("message");
+        String result ;
+        try{
+             result = jsonObject.getString("message");
+        }catch (Exception e){
+            result =  "Không có câu trả lời";
+        }
+        return result;
     }
 
-    public static void main(String[] args) {
-        new APIchat().result("hú");
-    }
 
 }

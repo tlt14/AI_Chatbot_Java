@@ -42,29 +42,33 @@ public class Handle {
         }
     }
     public void Weather(JTextArea textArea1, JSONObject res){
-        System.out.println(res.toString());
         JSONObject data = res.getJSONObject("data");
-        JSONObject location = data.getJSONObject("location");
-        JSONObject j= data.getJSONObject("current");
-        JSONObject text =j.getJSONObject("condition");
-        JSONObject forecast = data.getJSONObject("forecast");
-        JSONArray forecastday = forecast.getJSONArray("forecastday");
-        textArea1.append("================\n");
-        textArea1.append(location.get("name")+"\nThời tiết: \t"+text.get("text")+"  \nNhiệt độ: \t"+j.get("temp_c")+" độ C \nĐộ ẩm:\t"+j.get("humidity")+"\t\n");
-        textArea1.append("================\n");
-        for(int i= 1;i<forecastday.length();i++){
-            JSONObject dt = forecastday.getJSONObject(i);
-            JSONObject day= dt.getJSONObject("day");
-            JSONObject condition =day.getJSONObject("condition");
-
-            textArea1.append(dt.get("date")+"\n" +
-                    "Thời tiết: \t\t"+condition.get("text")+"  \n" +
-                    "Nhiệt độ thấp nhất: \t"+day.get("mintemp_c")+" độ C \n" +
-                    "Nhiệt độ cao nhất: \t"+day.get("maxtemp_c")+" độ C \n" +
-                    "Độ ẩm thấp trung bình: \t"+day.get("avghumidity")+"\n"
-            );
+        if(!data.has("error")){
+            JSONObject location = data.getJSONObject("location");
+            JSONObject j= data.getJSONObject("current");
+            JSONObject text =j.getJSONObject("condition");
+            JSONObject forecast = data.getJSONObject("forecast");
+            JSONArray forecastday = forecast.getJSONArray("forecastday");
             textArea1.append("================\n");
+            textArea1.append(location.get("name")+"\nThời tiết: \t"+text.get("text")+"  \nNhiệt độ: \t"+j.get("temp_c")+" độ C \nĐộ ẩm:\t"+j.get("humidity")+"\t\n");
+            textArea1.append("================\n");
+            for(int i= 1;i<forecastday.length();i++){
+                JSONObject dt = forecastday.getJSONObject(i);
+                JSONObject day= dt.getJSONObject("day");
+                JSONObject condition =day.getJSONObject("condition");
+
+                textArea1.append(dt.get("date")+"\n" +
+                        "Thời tiết: \t\t"+condition.get("text")+"  \n" +
+                        "Nhiệt độ thấp nhất: \t"+day.get("mintemp_c")+" độ C \n" +
+                        "Nhiệt độ cao nhất: \t"+day.get("maxtemp_c")+" độ C \n" +
+                        "Độ ẩm thấp trung bình: \t"+day.get("avghumidity")+"\n"
+                );
+                textArea1.append("================\n");
+            }
+        }else{
+            textArea1.append("Rep: No matching location found.\n");
         }
+
     }
     public void ChatBOT(JTextArea textArea1,JSONObject res){
         System.out.println(res);

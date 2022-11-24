@@ -13,7 +13,7 @@ public class Weather {
         JSONObject result = null;
         try {
             String url_request = "https://api.weatherapi.com/v1/forecast.json?key=823dff21e5ca42df845114013222411&q="+address+"&days=3&lang=vi";
-            Document doc =  Jsoup.connect(url_request).ignoreContentType(true).get();
+            Document doc =  Jsoup.connect(url_request).ignoreContentType(true).ignoreHttpErrors(true).get();
 
             result = new JSONObject(doc.body().ownText());
 
@@ -25,9 +25,5 @@ public class Weather {
 
     public JSONObject result (String addr){
             return getInfoWether(addr);
-    }
-    public static void main(String[] args) {
-        Weather m =new Weather();
-        System.out.println(m.result("Pleiku"));
     }
 }

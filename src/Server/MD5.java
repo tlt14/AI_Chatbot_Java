@@ -10,6 +10,7 @@ public class MD5{
     public JSONObject Hash(String mess){
         JSONObject jsonObject = new JSONObject();
         Document doc = null;
+        System.out.println("https://hashtoolkit.com/generate-hash/?text="+mess);
         try {
             doc = Jsoup.connect("https://hashtoolkit.com/generate-hash/?text="+mess).get();
             jsonObject.put("result","md5");

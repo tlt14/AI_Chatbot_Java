@@ -38,9 +38,9 @@ public class Whois {
         }
         return kq;
     }
-    public static void main(String[] args) {
-        Whois w = new Whois();
-        JSONObject object= new JSONObject(w.result("sgu.edu.vn"));
-        System.out.println(object);
-    }
+//    public static void main(String[] args) {
+//        Whois w = new Whois();
+//        JSONObject object= new JSONObject(w.result("sgu.edu.vn"));
+//        System.out.println(object);
+//    }
 }

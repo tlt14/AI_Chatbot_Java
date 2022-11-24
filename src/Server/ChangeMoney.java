@@ -41,11 +41,4 @@ public class ChangeMoney {
         }
         return result;
     }
-    public static void main(String[] args) {
-        ChangeMoney c= new ChangeMoney();
-        String moneyFrom = "usd";
-//        String moneyTo = ;
-        long money = 15000000;
-        System.out.println(c.result(moneyFrom,null,money));
-    }
 }

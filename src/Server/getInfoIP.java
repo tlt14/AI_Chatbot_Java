@@ -47,9 +47,4 @@ public class getInfoIP {
 
         return kq;
     }
-    public static void main(String[] args) {
-//        getInfoIP g=new getInfoIP();
-//        System.out.println(g.result(""));
-
-    }
 }

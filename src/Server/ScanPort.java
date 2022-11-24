@@ -19,10 +19,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class ScanPort {
     ExecutorService executorService;
-    public static void main(String[] args) throws InterruptedException, IOException {
-        new ScanPort().runPortScan("8.8.4.4;0;1000",new BufferedWriter(new OutputStreamWriter(System.out)));
-
-    }
+//    public static void main(String[] args) throws InterruptedException, IOException {
+//        new ScanPort().runPortScan("8.8.4.4;0;1000",new BufferedWriter(new OutputStreamWriter(System.out)));
+//
+//    }
 
     public void runPortScan(String mess,BufferedWriter out) throws IOException {
         JSONObject jsonObject = new JSONObject();

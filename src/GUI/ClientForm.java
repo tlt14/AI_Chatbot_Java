@@ -4,9 +4,6 @@ import Helper.Security;
 import Security.RSA.RSAUtil;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
-import org.jsoup.Connection;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -24,8 +21,6 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class ClientForm extends JFrame{
     private JTextArea textArea1;
@@ -79,17 +74,6 @@ public class ClientForm extends JFrame{
 
     }
 
-//    public String getIpServer() throws IOException {
-//        String api = "https://api-generator.retool.com/ZvkfeX/data/1"; // Ghi vào dòng 1 trong DB
-//        Document doc = Jsoup.connect(api)
-//                .ignoreContentType(true).ignoreHttpErrors(true)
-//                .header("Content-Type", "application/json")
-//                .method(Connection.Method.GET).execute().parse();
-//        JSONObject jsonObject = new JSONObject(doc.text());
-//        System.out.println(jsonObject);
-//        System.out.println(jsonObject.get("ip"));
-//        return (jsonObject.get("ip").toString());
-//    }
     public static void main(String[] args) {
         new ClientForm(null,"tlt14@gmail.com");
     }

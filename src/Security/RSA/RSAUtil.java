@@ -37,15 +37,15 @@ public class RSAUtil {
         return publicKey1;
     }
 
-    public static void main(String[] args) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
-        generateKey g =new generateKey();
-        RSAUtil rsaUtil = new RSAUtil();
-        String mahoa = rsaUtil.Encrypt("hello", g.getPublicKey());
-        System.out.println(mahoa);
-
-
-        String giaima = rsaUtil.Decrypt(mahoa,g.getPrivateKey());
-        String da = rsaUtil.Encrypt(giaima,(PublicKey) g.getPrivateKey());
-        System.out.println(da);
-    }
+//    public static void main(String[] args) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+//        generateKey g =new generateKey();
+//        RSAUtil rsaUtil = new RSAUtil();
+//        String mahoa = rsaUtil.Encrypt("hello", g.getPublicKey());
+//        System.out.println(mahoa);
+//
+//
+//        String giaima = rsaUtil.Decrypt(mahoa,g.getPrivateKey());
+//        String da = rsaUtil.Encrypt(giaima,(PublicKey) g.getPrivateKey());
+//        System.out.println(da);
+//    }
 }

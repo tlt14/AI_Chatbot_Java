@@ -47,7 +47,7 @@ public class PlayMusic{
                     .ignoreContentType(true)
                     .ignoreHttpErrors(true)
                     .get();
-            return new URL("http://localhost:4000/uploads/"+new JSONObject(doc.body().ownText()).getString("data"));
+            return new URL(ConfigURL.API_SONG+new JSONObject(doc.body().ownText()).getString("data"));
     }
 
     public static void play(String s) throws IOException {
